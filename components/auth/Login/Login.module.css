@@ -1,0 +1,24 @@
+.form__container {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px dashed white;
+  border-radius: 1rem;
+  padding: 3rem 5rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.form input {
+  padding: 0.25rem;
+}
+
+.error {
+  background: rgba(255, 0, 0, 0.6);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
