@@ -1,25 +1,31 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 import styles from "./Login.module.css";
-export const Login = () => {
+export const LoginForm = () => {
   const [error, setError] = useState("");
-  const { status } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
+
     const formData = new FormData(event.currentTarget);
-    const res = await signIn("credentials", {
-      username: formData.get("username"),
-      password: formData.get("password"),
-      redirect: false,
-    });
-    console.log(res);
-    if (res?.error) setError(res.error as string);
-    else return router.push("/dashboard");
+    const res = await signIn(
+      "credentials",
+      {
+        username: formData.get("username"),
+        password: formData.get("password"),
+        redirect: false,
+      },
+      { register: "false" }
+    );
+    if (res?.error) {
+      setError(res.error as string), setIsLoading(false);
+    } else return router.replace("/dashboard");
   };
 
   return (
@@ -29,12 +35,12 @@ export const Login = () => {
         <h2>Log In</h2>
 
         <label>Username:</label>
-        <input type="username" placeholder="username" name="username" />
+        <input type="text" placeholder="username" name="username" />
 
         <label>Password:</label>
         <input type="password" placeholder="*********" name="password" />
 
-        <button disabled={status === "authenticated"}>Log In</button>
+        <button disabled={isLoading}>Log In</button>
       </form>
     </div>
   );

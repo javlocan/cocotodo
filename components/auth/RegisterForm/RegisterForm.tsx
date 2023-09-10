@@ -4,29 +4,41 @@ import { FormEvent, useState } from "react";
 
 import styles from "./Register.module.css";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-export const Register = () => {
+import { signIn } from "next-auth/react";
+export const RegisterForm = () => {
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const router = useRouter();
-  const { status } = useSession();
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
+
     const formData = new FormData(event.currentTarget);
-
-    const res = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    const password = formData.get("password") as string;
+    const passwordrepeat = formData.get("passwordrepeat") as string;
+    if (password !== passwordrepeat) {
+      setError("Passwords do not match");
+      return;
+    }
+    if (password.length < 6) {
+      setError("Password needs to be at least 6 characters.");
+      return;
+    }
+    const res = await signIn(
+      "credentials",
+      {
         username: formData.get("username"),
-        email: formData.get("email"),
-        password: formData.get("password"),
-        passwordrepeat: formData.get("passwordrepeat"),
-      }),
-    });
-
-    const { message } = await res.json();
-    if (res.status !== 201) setError(message as string);
-    else return router.push("/dashboard");
+        password,
+        redirect: false,
+      },
+      { register: "true", email: formData.get("email") as string }
+    );
+    if (res?.error) {
+      setError(res.error as string);
+      setIsLoading(false);
+    } else return router.push("/dashboard");
   };
 
   return (
@@ -46,7 +58,7 @@ export const Register = () => {
         <label>Repeat password:</label>
         <input type="password" placeholder="*********" name="passwordrepeat" />
 
-        <button disabled={status === "authenticated"}>Create account</button>
+        <button disabled={isLoading}>Create account</button>
       </form>
     </div>
   );

@@ -6,8 +6,10 @@ const UserSchema = new Schema(
       type: String,
       unique: true,
       required: [true, "Username is required"],
-      //minLength: [3, "fullname must be at least 3 characters"],
-      //maxLength: [20, "fullname must be at most 20 characters"],
+    },
+    displayname: {
+      type: String,
+      required: false,
     },
     password: {
       type: String,
@@ -18,10 +20,6 @@ const UserSchema = new Schema(
       type: String,
       unique: true,
       required: [true, "Email is required"],
-      match: [
-        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-        "Email is invalid",
-      ],
     },
     image: {
       type: String,
