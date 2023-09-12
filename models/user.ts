@@ -26,6 +26,7 @@ const UserSchema = new Schema(
       required: false,
     },
     projects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
+    groups: [{ type: Schema.Types.ObjectId, ref: "Group" }],
   },
   {
     timestamps: true,

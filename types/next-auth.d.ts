@@ -8,9 +8,11 @@ declare module "next-auth" {
   }
   interface User extends DefaultUser {
     username: string;
+    displayname: string;
   }
 
   interface SessionUser {
+    displayname: string;
     username: string;
     image?: string;
     _id: Schema.Types.ObjectId;

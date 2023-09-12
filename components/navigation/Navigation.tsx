@@ -10,20 +10,20 @@ export function Navigation() {
   const { status, data: session } = useSession();
 
   return (
-    <nav>
-      <Link href="/">
-        <Image src="/logo.png" alt="Coconut Logo" width={40} height={40} />
-      </Link>
-      <h1>cocotodo</h1>
-      {status == "authenticated" ? (
-        <h2 style={{ color: "#777" }}>
-          {session?.user?.username?.toLocaleLowerCase()}
-        </h2>
-      ) : (
-        <></>
-      )}
-      <Link href="/dashboard">Dashboard</Link>
-      {status === "authenticated" ? <ByeButton /> : ""}
+    <nav className={styles.nav__container}>
+      <header className={styles.nav__header}>
+        <Link href="/dashboard">
+          <Image
+            src="/icons/icons8-house-100.png"
+            alt="Go to dashboard"
+            width={40}
+            height={40}
+          />
+        </Link>
+      </header>
+      <footer className={styles.nav__footer}>
+        {status === "authenticated" ? <ByeButton /> : ""}
+      </footer>
     </nav>
   );
 }

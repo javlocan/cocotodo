@@ -1,0 +1,50 @@
+.card {
+  width: 100%;
+  height: 90px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 1rem;
+}
+
+.card__content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  padding: 0rem 1rem;
+
+  background: white;
+  border-radius: 0.5rem;
+}
+.card:hover .card__interaction {
+  opacity: 1;
+  pointer-events: all;
+  transition: opacity 0.2s ease-in-out;
+}
+.card__interaction {
+  pointer-events: none;
+  opacity: 0;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 0.5rem;
+  height: 100%;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  padding: 0rem 1rem;
+}
+
+.card__interaction > img {
+  opacity: 0.8;
+  width: 32px;
+  height: 32px;
+}
+.checkbox {
+  scale: 1.25;
+}

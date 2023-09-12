@@ -3,6 +3,8 @@ import User from "@/models/user";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+import Project from "@/models/project";
+import Todo from "@/models/todo";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -37,9 +39,31 @@ export const authOptions: NextAuthOptions = {
             password: hashedPassword,
           });
 
+          const project = new Project({
+            name: "Mi primer proyecto",
+            description:
+              "Creado de forma predeterminada para empezar a explorar ",
+            ownerId: user._id,
+            participants: [user._id],
+          });
+
+          const todo = new Todo({
+            title: "Mi primera tarea",
+            content: "Creada de forma predeterminada para empezar a explorar ",
+            creatorId: user._id,
+          });
+
+          project.todos.push(todo);
+
+          user.displayname = user.username;
+          user.projects = [project._id];
+
           const savedUser = await user.save();
+          await project.save();
           return savedUser;
         }
+
+        // --------- REGISTRATION END ------------ //
 
         if (!userFound) throw new Error("Cannot find username");
 
@@ -63,21 +87,22 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
+        token.displayname = user.displayname;
         token.username = user.username;
         delete Object.assign(token, { image: token.picture }).picture;
         delete Object.assign(token, { _id: token.sub }).sub;
-
-        //token.name = user.username;
       }
       return token;
     },
     async session({ session, token }) {
       session.user = {
+        displayname: token.displayname as string,
         username: token.username as string,
         image: token.image as string,
         email: token.email as string,
         _id: token._id,
       };
+
       return session;
     },
   },

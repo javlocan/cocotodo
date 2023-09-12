@@ -1,11 +1,12 @@
 import { Schema, model, models } from "mongoose";
+import { TodoSchema } from "./todo";
 
-const GroupSchema = new Schema(
+const ProjectSchema = new Schema(
   {
     name: {
       type: String,
-      unique: true,
-      required: [true, "Group name is required"],
+      unique: false,
+      required: [true, "Project name is required"],
     },
     description: {
       type: String,
@@ -16,11 +17,18 @@ const GroupSchema = new Schema(
       ref: "User" || "Group",
       required: true,
     },
+    todos: {
+      type: [
+        {
+          type: TodoSchema,
+        },
+      ],
+      required: true,
+    },
     participants: {
       type: [{ type: Schema.Types.ObjectId, ref: "User" }],
       required: true,
     },
-    projects: { type: [{ type: Schema.Types.ObjectId, ref: "Project" }] },
     settings: {
       image: {
         type: String,
@@ -37,5 +45,5 @@ const GroupSchema = new Schema(
   }
 );
 
-const Group = models.Group || model("Group", GroupSchema);
-export default Group;
+const Project = models.Project || model("Project", ProjectSchema);
+export default Project;

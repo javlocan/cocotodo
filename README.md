@@ -2,6 +2,8 @@
 
 ## MY TODOS
 
+- I can't keep up with the loggin if wanna go fastttt
+
 - set all the route handlers with the proper operations
   - users - ongoing
   - groups - ongoing

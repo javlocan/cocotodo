@@ -1,0 +1,9 @@
+.byeButton {
+  background: none;
+  border: none;
+}
+
+.byeImage:hover {
+  scale: 1.1;
+  transition: scale 0.15s;
+}
