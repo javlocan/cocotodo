@@ -1,6 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
-const GroupSchema = new Schema(
+export const GroupSchema = new Schema(
   {
     name: {
       type: String,

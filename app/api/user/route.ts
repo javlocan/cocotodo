@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/libs/mongodb";
 
 import { User } from "@/models/user";
+import { GroupSchema } from "@/models/group";
 export async function GET(req: NextRequest) {
   const urlSearchParams = new URLSearchParams(req.nextUrl.search);
   const params = Object.fromEntries(urlSearchParams.entries());
@@ -20,17 +21,11 @@ export async function GET(req: NextRequest) {
     "+groups +projects -username -email"
   );
 
-  if (!foundUserInfo)
-    return NextResponse.json(
-      { error: "A weird error ocurred. Contact the web admin." },
-      { status: 400 }
-    );
-
-  if (foundUserInfo.groups.length > 0) {
-    await foundUserInfo.populate(["groups"]);
-  }
-  if (foundUserInfo.projects.length > 0) {
-    await foundUserInfo.populate(["projects"]);
-  }
+  //if (foundUserInfo.groups.length > 0) {
+  await foundUserInfo.populate(["groups"]);
+  //}
+  // if (foundUserInfo.projects.length > 0) {
+  await foundUserInfo.populate(["projects"]);
+  //}
   return NextResponse.json(foundUserInfo, { status: 200 });
 }
