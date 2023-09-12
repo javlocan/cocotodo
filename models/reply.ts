@@ -20,5 +20,4 @@ export const ReplySchema = new Schema(
   }
 );
 
-const Reply = models.Reply || model("Reply", ReplySchema);
-export default Reply;
+export const Reply = models.Reply || model("Reply", ReplySchema);

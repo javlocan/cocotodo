@@ -1,10 +1,10 @@
 import { connectDB } from "@/libs/mongodb";
-import User from "@/models/user";
+import { User } from "@/models/user";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import Project from "@/models/project";
-import Todo from "@/models/todo";
+import { Project } from "@/models/project";
+import { Todo } from "@/models/todo";
 
 export const authOptions: NextAuthOptions = {
   providers: [

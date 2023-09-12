@@ -45,5 +45,4 @@ const ProjectSchema = new Schema(
   }
 );
 
-const Project = models.Project || model("Project", ProjectSchema);
-export default Project;
+export const Project = models.Project || model("Project", ProjectSchema);

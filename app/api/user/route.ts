@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { connectDB } from "@/libs/mongodb";
 
-import User from "@/models/user";
+import { User } from "@/models/user";
 export async function GET(req: NextRequest) {
   const urlSearchParams = new URLSearchParams(req.nextUrl.search);
   const params = Object.fromEntries(urlSearchParams.entries());
@@ -26,10 +26,10 @@ export async function GET(req: NextRequest) {
       { status: 400 }
     );
 
-  if (foundUserInfo.groups.length) {
+  if (foundUserInfo.groups.length > 0) {
     await foundUserInfo.populate(["groups"]);
   }
-  if (foundUserInfo.projects.length) {
+  if (foundUserInfo.projects.length > 0) {
     await foundUserInfo.populate(["projects"]);
   }
   return NextResponse.json(foundUserInfo, { status: 200 });
