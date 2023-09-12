@@ -1,9 +1,9 @@
 import { connectDB } from "@/libs/mongodb";
-import Project from "@/models/project";
+import { Project } from "@/models/project";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
-import User from "@/models/user";
-import Todo from "@/models/todo";
+import { User } from "@/models/user";
+import { Todo } from "@/models/todo";
 export async function GET(req: NextRequest) {
   const urlSearchParams = new URLSearchParams(req.nextUrl.search);
   const params = Object.fromEntries(urlSearchParams.entries());
