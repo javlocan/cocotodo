@@ -5,7 +5,7 @@ import { connectDB } from "@/libs/mongodb";
 
 import { User } from "@/models/user";
 import { GroupSchema } from "@/models/group";
-export const Group = models.Group || model("Group", GroupSchema);
+const Group = models.Group || model("Group", GroupSchema);
 
 export async function GET(req: NextRequest) {
   const urlSearchParams = new URLSearchParams(req.nextUrl.search);
