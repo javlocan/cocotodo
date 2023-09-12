@@ -12,6 +12,7 @@
     "@types/node": "20.5.9",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
+    "antd": "^5.9.0",
     "bcryptjs": "^2.4.3",
     "dayjs": "^1.11.9",
     "eslint": "8.48.0",

@@ -1,5 +1,6 @@
 "use client";
 
+import dayjs from "dayjs";
 import React from "react";
 import styles from "./TodoCard.module.css";
 import { Todo } from "types";
@@ -31,7 +32,9 @@ export const TodoCard = React.memo(function TodoCard({
         <input className={styles.checkbox} type="checkbox" />
         <h3 className={styles.name}>{todo.title}</h3>
         {todo.deadline ? (
-          <p className={styles.description}>{todo.deadline}</p>
+          <p className={styles.description}>
+            {dayjs(todo.deadline).format("DD/MM/YYYY")}
+          </p>
         ) : (
           <p>S.F.</p>
         )}

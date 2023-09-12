@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 export const NewTodo = ({ projectId }: { projectId: string }) => {
   const [openForm, setOpenForm] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
-  const [date, setDate] = useState<Date | undefined>();
+  const [date, setDate] = useState<Dayjs>(dayjs(new Date()));
   const { data: session } = useSession();
 
   const router = useRouter();
@@ -23,7 +23,7 @@ export const NewTodo = ({ projectId }: { projectId: string }) => {
     if (title.length < 5) return alert("Title must be at least 5 characters");
     const body = {
       title,
-      deadline: dayjs(date).format("DD/MM/YYYY"),
+      deadline: date,
       content: "",
       creatorId: session?.user?._id,
       projectId,
@@ -36,6 +36,11 @@ export const NewTodo = ({ projectId }: { projectId: string }) => {
     });
     const result = await res.json();
     if (!result.error) router.refresh();
+  };
+
+  const handleDateChange = (value: Dayjs) => {
+    setDate(value);
+    setShowPicker(!showPicker);
   };
 
   return (
@@ -61,8 +66,9 @@ export const NewTodo = ({ projectId }: { projectId: string }) => {
         />
 
         <DatePicker
-          name="deadline"
-          form="newtodo"
+          onChange={(value) => {
+            if (value) handleDateChange(value);
+          }}
           className={styles.date__input}
           disabledDate={(current: Dayjs) =>
             current && current < dayjs().startOf("day")
@@ -72,13 +78,6 @@ export const NewTodo = ({ projectId }: { projectId: string }) => {
           bordered={false}
           suffixIcon={false}
           open={showPicker}
-          onChange={(date: Date) => {
-            console.log(date);
-            setDate(date);
-            if (date !== null) {
-              setShowPicker(!showPicker);
-            }
-          }}
           placeholder="S.F."
           value={date}
         />
