@@ -1,25 +1,29 @@
 .main {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 11fr 0.1fr 6fr;
   gap: 2rem;
   padding: 3rem;
 }
 
-.groups__container {
+.panel__container {
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
-.groups__list {
-  display: flex;
-  gap: 1rem;
+.panel__list {
+  display: grid;
+  grid-auto-rows: 100px;
 }
 
-.forms__container {
+.display__container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  gap: 2rem;
+  padding: 2rem 1rem 2rem 2rem;
+}
+.inter__sections {
+  border-right: 1px solid gray;
+  border-left: 1px solid gray;
 }

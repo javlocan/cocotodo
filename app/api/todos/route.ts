@@ -43,11 +43,15 @@ export async function POST(req: NextRequest) {
     content,
     deadline,
   });
-  const update = await Project.findByIdAndUpdate(projectId, {
-    $push: { todos: newTodo },
-  });
+  const update = await Project.findByIdAndUpdate(
+    projectId,
+    {
+      $push: { todos: newTodo },
+    },
+    { sort: { todos: -1 } }
+  ).exec();
 
-  console.log(update);
+  console.log("project", update);
   return NextResponse.json(
     { message: "Todo created successfully" },
     { status: 200 }

@@ -1,21 +1,29 @@
 .main {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2rem;
-
-  padding-inline: 3rem;
-  width: max(900px, 70%);
+  width: 100%;
+  display: grid;
+  grid-template-columns: 12fr 6fr;
 }
 
 .header {
+  grid-column: span 2;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  display: grid;
+  grid-template-columns: 12fr 6fr;
 
   padding: 1rem 0rem;
+
+  backdrop-filter: blur(15px);
+}
+.title {
+  width: 100%;
+  display: grid;
+  grid-template-rows: 6fr 6fr;
+  align-items: center;
+  padding-left: 1rem;
   border-bottom: 1px solid grey;
 }
 

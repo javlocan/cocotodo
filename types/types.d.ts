@@ -29,7 +29,7 @@ declare module "types" {
     title: string;
     content: string;
     creatorId: string;
-    deadline: string;
+    deadline: Date;
   }
 }
 

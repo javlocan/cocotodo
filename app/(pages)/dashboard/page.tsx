@@ -23,9 +23,9 @@ export default async function Dashboard() {
   const userInfo = await getUserInfo(session?.user?._id);
   return (
     <main className={styles.main}>
-      <section className={styles.groups__container}>
+      <section className={styles.panel__container}>
         <h2>Proyectos</h2>
-        <div className={styles.groups__list}>
+        <div className={styles.panel__list}>
           {userInfo.projects.length > 0 ? (
             userInfo.projects.map((project: Project) => (
               <ProjectCard project={project} key={project._id} />
@@ -34,11 +34,8 @@ export default async function Dashboard() {
             <div>{userInfo.error}</div>
           )}
         </div>
-        <NewProjectForm />
-      </section>
-      <section className={styles.groups__container}>
         <h2>Grupos</h2>
-        <div className={styles.groups__list}>
+        <div className={styles.panel__list}>
           {userInfo.groups.length > 0 ? (
             userInfo?.groups?.map((group: Group) => (
               <GroupCard group={group} key={group._id} />
@@ -47,6 +44,10 @@ export default async function Dashboard() {
             <div>{userInfo.error}</div>
           )}
         </div>
+      </section>
+      <aside className={styles.inter__sections}></aside>
+      <section className={styles.display__container}>
+        <NewProjectForm />
         <NewGroupForm />
       </section>
     </main>

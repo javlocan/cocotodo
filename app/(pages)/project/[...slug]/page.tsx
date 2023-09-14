@@ -1,12 +1,10 @@
-import { TodoCard } from "@/components/todos/TodoCard/TodoCard";
-
 import { redirect } from "next/navigation";
-import { Todo } from "types";
 
 import styles from "./page.module.css";
-import { NewTodo } from "@/components/todos/NewTodo/NewTodo";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { TodoPanel } from "@/components/todos/TodoPanel/TodoPanel";
+import { NewTodo } from "@/components/todos/NewTodo/NewTodo";
 async function getProject(ownerId: string, projectId: string) {
   const res = await fetch(
     `${process.env.NEXTAUTH_URL}/api/todos?ownerId=${ownerId}&projectId=${projectId}`,
@@ -20,11 +18,17 @@ export default async function TodosPage({
   params: { slug: Array<string> };
 }) {
   const session = await getServerSession(authOptions);
+
+  // Data, session and url handling here -------------
+
   const [ownerId, projectId] = params.slug;
 
   if (!ownerId || !projectId) redirect("/dashboard");
   if (!session) redirect("/");
+  console.log(session);
   const project = await getProject(ownerId, projectId);
+
+  // The main GRID for the SPA ------------------------
 
   return (
     <main className={styles.main}>
@@ -39,12 +43,10 @@ export default async function TodosPage({
           ))}
         </div>
       </header>
-      <section className={styles.todos}>
-        {project.todos?.map((todo: Todo) => (
-          <TodoCard key={todo._id} todo={todo} projectId={projectId} />
-        ))}
+      <TodoPanel params={params} />
+      <div style={{ gridColumn: "span 2" }}>
         <NewTodo projectId={projectId} />
-      </section>
+      </div>
     </main>
   );
 }

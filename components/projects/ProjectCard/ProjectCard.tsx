@@ -39,7 +39,9 @@ export const ProjectCard = ({ project }: { project: Project }) => {
       {session?.user?._id === project.ownerId && (
         <button onClick={handleDelete}>DELETE</button>
       )}
-      <button onClick={openProject}>OPEN</button>
+      <button onClick={openProject} style={{ bottom: "35px" }}>
+        OPEN
+      </button>
     </div>
   );
 };
