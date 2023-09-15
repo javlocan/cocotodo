@@ -55,7 +55,7 @@ export const NewGroupForm = () => {
           />
         </label>
         <div className={styles.submit}>
-          <Button disabled={isLoading} size="large">
+          <Button disabled={isLoading} size="large" htmlType="submit">
             Create Group
           </Button>
         </div>

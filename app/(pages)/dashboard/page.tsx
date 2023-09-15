@@ -8,6 +8,7 @@ import { Group } from "types";
 import { NewProjectForm } from "@/components/projects/NewProjectForm/NewProjectForm";
 import { ProjectPanel } from "@/components/projects/ProjectPanel/ProjectPanel";
 import { Divider } from "antd";
+import { GroupPanel } from "@/components/groups/GroupPanel/GroupPanel";
 
 async function getUserInfo(id: string) {
   const res = await fetch(`${process.env.NEXTAUTH_URL}/api/user?id=${id}`, {
@@ -25,16 +26,7 @@ export default async function Dashboard() {
     <main className={styles.main}>
       <section className={styles.panel__container}>
         <ProjectPanel userInfo={userInfo} />
-        <h2>Grupos</h2>
-        <div className={styles.panel__list}>
-          {userInfo.groups.length > 0 ? (
-            userInfo?.groups?.map((group: Group) => (
-              <GroupCard group={group} key={group._id} />
-            ))
-          ) : (
-            <div>{userInfo.error}</div>
-          )}
-        </div>
+        <GroupPanel userInfo={userInfo} />
       </section>
       <aside className={styles.inter__sections}></aside>
       <section className={styles.display__container}>
