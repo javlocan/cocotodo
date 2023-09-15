@@ -1,7 +1,9 @@
 .main {
+  height: 100%;
   width: 100%;
   display: grid;
   grid-template-columns: 11fr 1fr 6fr;
+  grid-template-rows: 2fr 10fr;
   background-color: rgba(245, 245, 245, 1);
 }
 
@@ -45,6 +47,8 @@
 }
 
 .right__display {
+  position: sticky;
+  top: 0;
   background-color: rgba(245, 245, 245, 1);
   padding: 1rem;
   grid-column: 3/4;

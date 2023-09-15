@@ -33,6 +33,7 @@ export const TodoPanel = ({ project }: { project: Project }) => {
   return (
     <section className={styles.todos__container} ref={scope}>
       {todos?.map((todo: Todo, i: number) => {
+        // Si mañana es el mismo dia, height cambia
         const isSameDayAsTomorrow = dayjs(todo.deadline).isSame(
           todos[i + 1]?.deadline,
           "day"
@@ -40,10 +41,12 @@ export const TodoPanel = ({ project }: { project: Project }) => {
         const isFirstNullDeadline =
           todo.deadline === null && todos[i - 1].deadline !== null;
         const deadline =
-          todo.deadline &&
-          !dayjs(todo.deadline).isSame(todos[i - 1]?.deadline, "day")
-            ? dayjs(todo.deadline).format("dddDD")
-            : "";
+          i !== 0
+            ? todo.deadline &&
+              !dayjs(todo.deadline).isSame(todos[i - 1]?.deadline, "day")
+              ? dayjs(todo.deadline).format("dddDD")
+              : ""
+            : dayjs(todo.deadline).format("dddDD");
         const newmonth =
           todos[i + 1]?.deadline &&
           !dayjs(todo.deadline).isSame(todos[i + 1]?.deadline, "month")
