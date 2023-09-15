@@ -1,10 +1,14 @@
 "use client";
 
 import { Project } from "types";
-
+import Image from "next/image";
 import styles from "./ProjectCard.module.css";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { motion } from "framer-motion";
+import { useState } from "react";
+import { Spin } from "antd";
+import { Loading3QuartersOutlined } from "@ant-design/icons";
 
 const deleteProject = async (id: string) => {
   const res = await fetch(`/api/projects?id=${id}`, {
@@ -16,7 +20,9 @@ const deleteProject = async (id: string) => {
 export const ProjectCard = ({ project }: { project: Project }) => {
   const { data: session } = useSession();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const handleDelete = async () => {
+    setIsLoading(true);
     await deleteProject(project._id);
     router.refresh();
   };
@@ -25,23 +31,36 @@ export const ProjectCard = ({ project }: { project: Project }) => {
   };
 
   return (
-    <div
-      className={styles.card}
+    <motion.div
+      initial={{ opacity: 0, y: -30 }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        type: "Spring",
+        transition: { duration: 0.5 },
+      }}
+      exit={{ opacity: 0, scale: 0.2, transition: { duration: 0.3 } }}
+      layout
+      className={styles.card__container}
       style={{
         backgroundColor: project.settings?.color || "rgba(180,180,180)",
       }}
     >
-      <h3 className={styles.name}>{project.name}</h3>
-      <p className={styles.description}>{project.description}</p>
-      <span className={styles.participants}>
-        {project.participants.length} ppl
-      </span>
-      {session?.user?._id === project.ownerId && (
-        <button onClick={handleDelete}>DELETE</button>
-      )}
-      <button onClick={openProject} style={{ bottom: "35px" }}>
-        OPEN
-      </button>
-    </div>
+      <Spin spinning={isLoading} style={{ color: "black" }}>
+        <article className={styles.card}>
+          <h3 className={styles.name}>{project.name}</h3>
+          <p className={styles.description}>{project.description}</p>
+          <span className={styles.participants}>
+            {project.participants.length} ppl
+          </span>
+          {session?.user?._id === project.ownerId && (
+            <button onClick={handleDelete}>DELETE</button>
+          )}
+          <button onClick={openProject} style={{ bottom: "35px" }}>
+            OPEN
+          </button>
+        </article>
+      </Spin>
+    </motion.div>
   );
 };

@@ -4,6 +4,8 @@
   --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
     "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
     "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+
+  font-size: 16px;
 }
 
 * {
@@ -27,10 +29,11 @@ body {
   justify-content: flex-start;
   align-items: flex-start;
 
-  background-color: rgba(245, 245, 245, 1);
+  background-color: white;
 }
 .scroller {
   overflow-x: hidden;
+  scrollbar-gutter: stable;
   width: 100%;
   height: 100dvh;
 }
@@ -48,15 +51,21 @@ a:hover {
   transition: scale 0.15s;
 }
 
+span {
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.9);
+}
 h1 {
   font-size: 3.2rem;
   font-weight: 600;
 }
 
 h2 {
-  font-style: italic;
-  font-weight: 700;
-  font-size: 2rem;
+  font-family: var(--font-lora);
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 2rem;
+
   color: rgba(140, 140, 140, 1);
 }
 

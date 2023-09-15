@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import { User } from "@/models/user";
 import { Todo } from "@/models/todo";
+import { Group } from "@/models/group";
 export async function GET(req: NextRequest) {
   const urlSearchParams = new URLSearchParams(req.nextUrl.search);
   const params = Object.fromEntries(urlSearchParams.entries());
@@ -20,12 +21,19 @@ export async function GET(req: NextRequest) {
 }
 export async function POST(req: NextRequest) {
   const newProject = await req.json();
+  if (!newProject.ownerId || !newProject.name) {
+    return NextResponse.json(
+      { error: "Rellena todos los campos" },
+      { status: 400 }
+    );
+  }
+
   connectDB();
   const foundProject = await Project.findOne({ name: newProject.name });
 
   if (foundProject) {
     return NextResponse.json(
-      { error: "Project name is taken" },
+      { error: "El proyecto ya existe en algún lado" },
       { status: 400 }
     );
   }
@@ -36,15 +44,21 @@ export async function POST(req: NextRequest) {
   const todo = new Todo({
     title: "A simple todo",
     content: "with some content",
-    creatorId: project.ownerId,
+    creatorId: project.participants[0]._id,
   });
   project.todos.push(todo);
 
-  await project.save();
+  await project.save(); // proyecto guardado
 
-  await User.findByIdAndUpdate(project.ownerId, {
+  await User.findByIdAndUpdate(project.participants[0]._id, {
     $push: { projects: project },
   });
+
+  if (project.participants[0]._id !== project.ownerId) {
+    await Group.findByIdAndUpdate(project.ownerId, {
+      $push: { projects: project },
+    });
+  }
 
   return NextResponse.json({ project }, { status: 200 });
 }

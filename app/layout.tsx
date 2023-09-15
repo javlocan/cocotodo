@@ -4,7 +4,19 @@ import "./globals.css";
 
 import { Navigation } from "@/c/navigation";
 import { NextAuthProvider } from "@/libs/auth/";
-import { fraunces, inter } from "./fonts";
+import { lora, inter } from "./fonts";
+
+import { ConfigProvider } from "antd";
+import esES from "antd/es/locale/es_ES";
+import dayjs from "dayjs";
+
+dayjs.locale("es");
+
+const theme = {
+  components: {
+    Spin: { colorPrimary: "#444" },
+  },
+};
 
 export const metadata: Metadata = {
   title: "todococo",
@@ -18,11 +30,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} ${fraunces.variable}`}>
-        <NextAuthProvider>
-          <Navigation />
-          <div className="scroller">{children}</div>
-        </NextAuthProvider>
+      <body className={`${inter.className} ${lora.variable}`}>
+        <ConfigProvider locale={esES} theme={theme}>
+          <NextAuthProvider>
+            <Navigation />
+            <div className="scroller">{children}</div>
+          </NextAuthProvider>
+        </ConfigProvider>
       </body>
     </html>
   );

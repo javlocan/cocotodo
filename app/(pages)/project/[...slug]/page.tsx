@@ -1,10 +1,12 @@
 import { redirect } from "next/navigation";
-
 import styles from "./page.module.css";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { TodoPanel } from "@/components/todos/TodoPanel/TodoPanel";
 import { NewTodo } from "@/components/todos/NewTodo/NewTodo";
+import { Antvatar } from "@/components/users/Antvatar/Antvatar";
+import { Participants } from "@/components/users/Antvatar/Participants";
+
 async function getProject(ownerId: string, projectId: string) {
   const res = await fetch(
     `${process.env.NEXTAUTH_URL}/api/todos?ownerId=${ownerId}&projectId=${projectId}`,
@@ -25,7 +27,7 @@ export default async function TodosPage({
 
   if (!ownerId || !projectId) redirect("/dashboard");
   if (!session) redirect("/");
-  console.log(session);
+
   const project = await getProject(ownerId, projectId);
 
   // The main GRID for the SPA ------------------------
@@ -35,18 +37,25 @@ export default async function TodosPage({
       <header className={styles.header}>
         <div className={styles.title}>
           <h1>{project.name}</h1>
-          <h2>{project.ownerId.displayname}</h2>
-        </div>
-        <div className={styles.participants}>
-          {project.participants.map((participant: any) => (
-            <div key={participant._id}>{participant.displayname}</div>
-          ))}
+
+          <div className={styles.participants}>
+            <div className={styles.owner}>
+              <Antvatar user={project.participants[0]} />
+              <h2>{project.ownerId.displayname}</h2>
+            </div>
+            <Participants>
+              {project.participants.map((participant: any) => (
+                <Antvatar key={participant._id} user={participant} />
+              ))}
+            </Participants>
+          </div>
         </div>
       </header>
-      <TodoPanel params={params} />
-      <div style={{ gridColumn: "span 2" }}>
+      <TodoPanel project={project} />
+      <aside className={styles.inter__sections}></aside>
+      <section className={styles.right__display}>
         <NewTodo projectId={projectId} />
-      </div>
+      </section>
     </main>
   );
 }

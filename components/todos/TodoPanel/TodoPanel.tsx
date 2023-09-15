@@ -1,42 +1,37 @@
-import { TodoCard } from "@/components/todos/TodoCard/TodoCard";
+"use client";
 
-import { redirect } from "next/navigation";
-import { Todo } from "types";
+import { TodoCard } from "@/components/todos/TodoCard/TodoCard";
+import { Project, Todo } from "types";
 
 import styles from "./TodoPanel.module.css";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import dayjs from "dayjs/esm";
-async function getProject(ownerId: string, projectId: string) {
-  const res = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/todos?ownerId=${ownerId}&projectId=${projectId}`,
-    { method: "GET" }
-  );
-  return await res.json();
-}
-export const TodoPanel = async ({
-  params,
-}: {
-  params: { slug: Array<string> };
-}) => {
-  const session = await getServerSession(authOptions);
-  const [ownerId, projectId] = params.slug;
+import { useEffect } from "react";
+import { stagger, useAnimate } from "framer-motion";
 
-  if (!ownerId || !projectId) redirect("/dashboard");
-  if (!session) redirect("/");
-  const project = await getProject(ownerId, projectId);
-
+export const TodoPanel = ({ project }: { project: Project }) => {
   const todos = project.todos.sort((prev: Todo, post: Todo) => {
-    const a: any = parseInt(dayjs(prev.deadline).format("YYYYMMDD")) || null;
-    const b: any = parseInt(dayjs(post.deadline).format("YYYYMMDD")) || null;
+    const a: any =
+      parseInt(dayjs(prev.deadline).format("YYYYMMDDHHmmss")) || null;
+    const b: any =
+      parseInt(dayjs(post.deadline).format("YYYYMMDDHHmmss")) || null;
     if (a === "" || a === null) return 1;
     if (b === "" || b === null) return -1;
     if (a === b) return 0;
     return a < b ? -1 : 1;
   });
+  const [scope, animate] = useAnimate();
+  useEffect(() => {
+    animate(
+      ".todocard",
+      { y: [10, 0], opacity: [0, 1] },
+      { delay: stagger(0.05) }
+    );
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <section className={styles.todos__container}>
+    <section className={styles.todos__container} ref={scope}>
       {todos?.map((todo: Todo, i: number) => {
         const isSameDayAsTomorrow = dayjs(todo.deadline).isSame(
           todos[i + 1]?.deadline,
@@ -71,7 +66,7 @@ export const TodoPanel = async ({
             >
               <span>{deadline}</span>
             </aside>
-            <TodoCard key={todo._id} todo={todo} projectId={projectId} />
+            <TodoCard key={todo._id} todo={todo} projectId={project._id} />
             {newmonth ? <div className={styles.month}>{newmonth}</div> : null}
           </>
         );

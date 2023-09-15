@@ -13,11 +13,21 @@ export default function Error({
     console.log(error);
   });
   return (
-    <div>
+    <main
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "4rem",
+      }}
+    >
       <h2>Upsy!</h2>
       <button onClick={() => reset()}>
         Dame aquí para intentarlo de nuevo
       </button>
-    </div>
+    </main>
   );
 }

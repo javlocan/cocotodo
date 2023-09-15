@@ -22,7 +22,10 @@ declare module "types" {
     ownerId: string;
     description: string;
     participants: string[];
+    todos: Todo[];
     settings: { color?: string; image?: string };
+    createdAt: Date;
+    updatedAt: Date;
   }
   interface Todo {
     _id: string;

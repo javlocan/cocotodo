@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import styles from "./NewGroupForm.module.css";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Button, Input } from "antd";
 
 export const NewGroupForm = () => {
   const [error, setError] = useState("");
@@ -42,16 +43,22 @@ export const NewGroupForm = () => {
         {error && <div className={styles.error}>{error}</div>}
         <h2>Create new group:</h2>
 
-        <label>Group name:</label>
-        <input type="text" placeholder="My group" name="name" />
-
-        <label>Description (optional):</label>
-        <input
-          placeholder="Work group from this organization"
-          name="description"
-        />
-
-        <button disabled={isLoading}>Create Group</button>
+        <label>
+          <span>Group name:</span>
+          <Input type="text" placeholder="My group" name="name" />
+        </label>
+        <label>
+          <span>Description (optional):</span>
+          <Input
+            placeholder="Work group from this organization"
+            name="description"
+          />
+        </label>
+        <div className={styles.submit}>
+          <Button disabled={isLoading} size="large">
+            Create Group
+          </Button>
+        </div>
       </form>
     </div>
   );

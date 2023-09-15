@@ -1,6 +1,5 @@
 "use client";
 
-import dayjs from "dayjs";
 import React from "react";
 import styles from "./TodoCard.module.css";
 import { Todo } from "types";
@@ -26,8 +25,9 @@ export const TodoCard = ({
     const result = await res.json();
     if (!result.error) router.refresh();
   };
+
   return (
-    <article className={styles.card}>
+    <article className={`${styles.card} todocard`}>
       <section className={styles.card__content}>
         <input className={styles.checkbox} type="checkbox" />
         <h3 className={styles.name}>{todo.title}</h3>

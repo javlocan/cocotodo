@@ -51,7 +51,6 @@ export async function POST(req: NextRequest) {
     { sort: { todos: -1 } }
   ).exec();
 
-  console.log("project", update);
   return NextResponse.json(
     { message: "Todo created successfully" },
     { status: 200 }

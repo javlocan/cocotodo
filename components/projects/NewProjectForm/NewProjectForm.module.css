@@ -1,8 +1,5 @@
 .form__container {
-  background: rgba(0, 0, 0, 0.1);
-  border: 1px dashed black;
-  border-radius: 1rem;
-  padding: 1rem 2rem;
+  padding: 0rem 1rem;
 }
 
 .form {
@@ -14,9 +11,20 @@
 }
 
 .form input,
-.form textarea {
+.form textarea,
+.form label {
   width: 100%;
-  padding: 0.25rem 0.5rem;
+}
+.form input,
+.form select {
+  margin-top: 5px;
+}
+
+.submit {
+  padding-top: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .error {
