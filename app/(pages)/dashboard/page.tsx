@@ -3,8 +3,7 @@ import { redirect } from "next/navigation";
 import styles from "./page.module.css";
 import { NewGroupForm } from "@/components/groups/NewGroupForm/NewGroupForm";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { GroupCard } from "@/components/groups/GroupCard/GroupCard";
-import { Group } from "types";
+
 import { NewProjectForm } from "@/components/projects/NewProjectForm/NewProjectForm";
 import { ProjectPanel } from "@/components/projects/ProjectPanel/ProjectPanel";
 import { Divider } from "antd";

@@ -9,7 +9,7 @@ import { lora, inter } from "./fonts";
 import { ConfigProvider } from "antd";
 import esES from "antd/es/locale/es_ES";
 import dayjs from "dayjs";
-import { PageTransitionWrapper } from "@/components/navigation/PageTransitionWrapper/PageTransitionWrapper";
+import { SocketProvider } from "@/libs/SocketProvider/SocketProvider";
 
 dayjs.locale("es");
 
@@ -34,8 +34,10 @@ export default function RootLayout({
       <body className={`${inter.className} ${lora.variable}`}>
         <ConfigProvider locale={esES} theme={theme}>
           <NextAuthProvider>
-            <Navigation />
-            <PageTransitionWrapper>{children}</PageTransitionWrapper>
+            <SocketProvider>
+              <Navigation />
+              {children}
+            </SocketProvider>
           </NextAuthProvider>
         </ConfigProvider>
       </body>

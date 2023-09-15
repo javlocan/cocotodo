@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useRef, PropsWithChildren } from "react";
+import React, { useContext, useRef, PropsWithChildren, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { usePathname } from "next/navigation";
@@ -17,23 +17,22 @@ function FrozenRouter(props: PropsWithChildren<{}>) {
     </LayoutRouterContext.Provider>
   );
 }
+
 export const PageTransitionWrapper = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const pathname = usePathname();
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence>
       <motion.div
         className="scroller"
-        key={pathname}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.2, type: "tween" }}
+        transition={{ duration: 1, type: "tween" }}
       >
-        <FrozenRouter>{children}</FrozenRouter>
+        {children}
       </motion.div>
       {/*     <motion.div
         key={pathname + "1"}
