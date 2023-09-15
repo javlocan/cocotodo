@@ -40,12 +40,12 @@ export default async function TodosPage({
 
           <div className={styles.participants}>
             <div className={styles.owner}>
-              <Antvatar user={project.participants[0]} />
+              <Antvatar user={project.participants[0]} size={24} />
               <h2>{project.ownerId.displayname}</h2>
             </div>
-            <Participants>
+            <Participants size={40}>
               {project.participants.map((participant: any) => (
-                <Antvatar key={participant._id} user={participant} />
+                <Antvatar key={participant._id} user={participant} size={40} />
               ))}
             </Participants>
           </div>

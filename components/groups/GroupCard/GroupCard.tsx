@@ -15,7 +15,13 @@ const deleteGroup = async (id: string) => {
   });
   return res.json();
 };
-export const GroupCard = ({ group }: { group: Group }) => {
+export const GroupCard = ({
+  group,
+  stagger,
+}: {
+  group: Group;
+  stagger: number;
+}) => {
   const { data: session } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +39,7 @@ export const GroupCard = ({ group }: { group: Group }) => {
         opacity: 1,
         y: 0,
         type: "Spring",
-        transition: { duration: 0.5 },
+        transition: { duration: 0.5, delay: 0.3 + stagger },
       }}
       exit={{ opacity: 0, scale: 0.2, transition: { duration: 0.3 } }}
       layout

@@ -11,9 +11,6 @@ export const ProjectPanel = ({ userInfo }: { userInfo: any }) => {
     const b: any = parseInt(dayjs(post.updatedAt).format("YYYYMMDDHHmmss"));
     return a > b ? -1 : 1;
   });
-  const log = projects.map((project: Project) => {
-    return project.updatedAt;
-  });
 
   return (
     <>
@@ -22,8 +19,12 @@ export const ProjectPanel = ({ userInfo }: { userInfo: any }) => {
       <div className={styles.panel__list}>
         <LayoutGroup>
           <AnimatePresence>
-            {projects.map((project: Project) => (
-              <ProjectCard project={project} key={project._id} />
+            {projects.map((project: Project, i: number) => (
+              <ProjectCard
+                project={project}
+                key={project._id}
+                stagger={i * 0.1}
+              />
             ))}
           </AnimatePresence>
         </LayoutGroup>

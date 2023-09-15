@@ -1,14 +1,12 @@
 "use client";
 
 import { Project } from "types";
-import Image from "next/image";
 import styles from "./ProjectCard.module.css";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Spin } from "antd";
-import { Loading3QuartersOutlined } from "@ant-design/icons";
 
 const deleteProject = async (id: string) => {
   const res = await fetch(`/api/projects?id=${id}`, {
@@ -17,7 +15,13 @@ const deleteProject = async (id: string) => {
   return res.json();
 };
 
-export const ProjectCard = ({ project }: { project: Project }) => {
+export const ProjectCard = ({
+  project,
+  stagger,
+}: {
+  project: Project;
+  stagger: number;
+}) => {
   const { data: session } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -37,11 +41,11 @@ export const ProjectCard = ({ project }: { project: Project }) => {
         opacity: 1,
         y: 0,
         type: "Spring",
-        transition: { duration: 0.5 },
+        transition: { duration: 0.5, delay: stagger },
       }}
       exit={{ opacity: 0, scale: 0.2, transition: { duration: 0.3 } }}
       layout
-      className={styles.card__container}
+      className={`${styles.card__container} projectcard`}
       style={{
         backgroundColor: project.settings?.color || "rgba(180,180,180)",
       }}

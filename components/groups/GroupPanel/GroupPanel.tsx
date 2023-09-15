@@ -19,8 +19,8 @@ export const GroupPanel = ({ userInfo }: { userInfo: any }) => {
       <div className={styles.panel__list}>
         <LayoutGroup>
           <AnimatePresence>
-            {groups.map((group: Group) => (
-              <GroupCard group={group} key={group._id} />
+            {groups.map((group: Group, i: number) => (
+              <GroupCard group={group} key={group._id} stagger={i * 0.1} />
             ))}
           </AnimatePresence>
         </LayoutGroup>
