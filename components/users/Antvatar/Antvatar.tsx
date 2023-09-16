@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar } from "antd";
 import React from "react";
 import { User } from "types";

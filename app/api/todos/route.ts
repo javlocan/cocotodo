@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
-import { connectDB } from "@/libs/mongodb";
+import { connectDB } from "@/lib/mongodb";
 import { Project } from "@/models/project";
 import { Todo } from "@/models/todo";
 import { User } from "@/models/user";

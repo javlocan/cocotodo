@@ -16,7 +16,11 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
       path: path,
       // @ts-ignore
       addTrailingSlash: false,
+      cors: {
+        origin: "*",
+      },
     });
+
     res.socket.server.io = io;
   }
 

@@ -43,7 +43,6 @@ export const NewTodo = ({ projectId }: { projectId: string }) => {
 
   const clearForm = () => {
     const form = document.getElementById("newform") as HTMLFormElement;
-    console.log(form);
     //form.reset;
   };
   return (

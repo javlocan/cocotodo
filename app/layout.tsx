@@ -3,13 +3,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { Navigation } from "@/c/navigation";
-import { NextAuthProvider } from "@/libs/auth/";
+import { NextAuthProvider } from "@/lib/auth";
 import { lora, inter } from "./fonts";
 
 import { ConfigProvider } from "antd";
 import esES from "antd/es/locale/es_ES";
 import dayjs from "dayjs";
-import { SocketProvider } from "@/libs/SocketProvider/SocketProvider";
+import { SocketProvider } from "@/lib/SocketProvider/SocketProvider";
 
 dayjs.locale("es");
 
@@ -34,10 +34,8 @@ export default function RootLayout({
       <body className={`${inter.className} ${lora.variable}`}>
         <ConfigProvider locale={esES} theme={theme}>
           <NextAuthProvider>
-            <SocketProvider>
-              <Navigation />
-              {children}
-            </SocketProvider>
+            <Navigation />
+            {children}
           </NextAuthProvider>
         </ConfigProvider>
       </body>

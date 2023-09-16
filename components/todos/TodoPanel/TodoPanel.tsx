@@ -7,8 +7,26 @@ import styles from "./TodoPanel.module.css";
 import dayjs from "dayjs/esm";
 import { useEffect } from "react";
 import { stagger, useAnimate } from "framer-motion";
+import { useSocket } from "@/lib/SocketProvider/SocketProvider";
 
 export const TodoPanel = ({ project }: { project: Project }) => {
+  // En el video él pasa algunos parametros desde la página
+  // le pasa la apiUrl : /api/socket/PROJECTS SERIA VA EN OTRO SITIO SI
+  // le pasa la query, que la puedo montar yo aqui
+  // le pasa un "name" que es el nombre del Channel que será el id del proyecto seguro
+  // le pasa un tipo que no voy a usar
+
+  // DIFERENCIA: él manda un form
+
+  /* useEffect(() => {
+    console.log("is socket?", socket !== null);
+    if (!socket) return;
+
+    const channelKey = `updateProject:${project._id}`;
+    socket.on(channelKey, () => {
+      console.log("socket is receiving");
+    });
+  }); */
   const todos = project.todos.sort((prev: Todo, post: Todo) => {
     const a: any =
       parseInt(dayjs(prev.deadline).format("YYYYMMDDHHmmss")) || null;

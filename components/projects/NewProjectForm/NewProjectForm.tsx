@@ -44,7 +44,6 @@ export const NewProjectForm = ({ groups }: { groups: [Group] }) => {
     setIsLoading(true);
 
     const formData = new FormData(event.currentTarget);
-    console.log(formData.getAll("name"));
     const body = {
       name: formData.get("name"),
       description: formData.get("description"),

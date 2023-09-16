@@ -1,7 +1,7 @@
 import { Schema, model, models } from "mongoose";
 import { TodoSchema } from "./todo";
 
-const ProjectSchema = new Schema(
+export const ProjectSchema = new Schema(
   {
     name: {
       type: String,

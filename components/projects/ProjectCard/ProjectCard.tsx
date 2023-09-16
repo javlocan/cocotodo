@@ -50,7 +50,11 @@ export const ProjectCard = ({
         backgroundColor: project.settings?.color || "rgba(180,180,180)",
       }}
     >
-      <Spin spinning={isLoading} style={{ color: "black" }}>
+      <Spin
+        spinning={isLoading}
+        style={{ color: "black" }}
+        wrapperClassName="projectcard"
+      >
         <article className={styles.card}>
           <h3 className={styles.name}>{project.name}</h3>
           <p className={styles.description}>{project.description}</p>

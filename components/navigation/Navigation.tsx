@@ -8,7 +8,7 @@ import { ByeButton } from "../auth";
 
 import { useState } from "react";
 import { Avatar, Divider } from "antd";
-import { SocketIndicator } from "../SocketIndicator/SocketIndicator";
+import { SocketIndicator } from "../sockets/SocketIndicator";
 
 export function Navigation() {
   const [unfolded, setUnfolded] = useState(false);
@@ -54,7 +54,6 @@ export function Navigation() {
             className={styles.invert}
           />
         </Link>
-        <SocketIndicator />
       </header>
       <footer className={styles.nav__footer}>
         <Divider style={{ background: "rgba(255, 255, 255, 0.25)" }} />

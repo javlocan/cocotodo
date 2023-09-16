@@ -1,23 +1,27 @@
-import { connectDB } from "@/libs/mongodb";
-import { Project } from "@/models/project";
 import { NextRequest, NextResponse } from "next/server";
-import mongoose from "mongoose";
+
+import { connectDB } from "@/lib/mongodb";
+
+import { Project } from "@/models/project";
 import { User } from "@/models/user";
 import { Todo } from "@/models/todo";
 import { Group } from "@/models/group";
-export async function GET(req: NextRequest) {
-  const urlSearchParams = new URLSearchParams(req.nextUrl.search);
-  const params = Object.fromEntries(urlSearchParams.entries());
-  const objectId = new mongoose.Types.ObjectId(params.id);
 
+export async function GET(req: NextRequest, res: NextResponse) {
+  const urlSearchParams = new URLSearchParams(req.nextUrl.search);
+  // tengo k pasarle la id del proyecto
+  const { id: projectId } = Object.fromEntries(urlSearchParams.entries());
   connectDB();
-  const foundProjects = await Project.find({ ownerId: objectId });
-  if (!foundProjects)
+
+  const foundProject = await Project.findById(projectId);
+
+  if (!foundProject)
     return NextResponse.json(
       { error: "You don't have Projects" },
       { status: 400 }
     );
-  return NextResponse.json(foundProjects, { status: 200 });
+
+  return NextResponse.json(foundProject, { status: 200 });
 }
 export async function POST(req: NextRequest) {
   const newProject = await req.json();

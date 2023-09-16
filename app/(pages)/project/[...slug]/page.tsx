@@ -14,6 +14,7 @@ async function getProject(ownerId: string, projectId: string) {
   );
   return await res.json();
 }
+
 export default async function TodosPage({
   params,
 }: {
