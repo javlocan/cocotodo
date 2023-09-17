@@ -7,11 +7,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   res.writeHead(200, {
     Connection: "keep-alive",
+    "Access-Control-Allow-Credentials": "true",
     "Access-Control-Allow-Origin": `${process.env.NEXTAUTH_URL}`,
     "Content-Encoding": "none",
     "Cache-Control": "no-cache, no-transform",
     "Content-Type": "text/event-stream",
-    "X-Accel-Buffering": "no",
   });
 
   const interval = setInterval(async () => {
