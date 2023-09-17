@@ -15,7 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   const interval = setInterval(async () => {
-    connectDB();
+    await connectDB();
     const projectId = req.query.id;
     const project = await Project.findById(projectId);
 
@@ -24,14 +24,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const reRender = lastUpdateClient !== lastUpdateServer;
     console.log("Checking how this is going ", reRender, project);
+
     res.write(
       `data: ${JSON.stringify({
         message: reRender ? "Someone's done something" : "Chill",
         value: reRender,
       })}\n\n`
     );
-
-    mongoose.disconnect();
   }, 3000);
 
   res.on("close", () => {
