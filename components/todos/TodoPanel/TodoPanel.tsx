@@ -1,32 +1,16 @@
 "use client";
+
 import { TodoCard } from "@/components/todos/TodoCard/TodoCard";
 import { Project, Todo } from "types";
 import styles from "./TodoPanel.module.css";
 import dayjs from "dayjs/esm";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import { Session } from "next-auth";
 import { NewTodo } from "../NewTodo/NewTodo";
 import { Participants } from "@/components/users/Antvatar/Participants";
 import { Antvatar } from "@/components/users/Antvatar/Antvatar";
 import { Spin } from "antd";
-
-export async function getProject(ownerId: string, projectId: string) {
-  const res = await fetch(`/api/todos?ownerId=${ownerId}&projectId=${projectId}`, {
-    method: "GET",
-  });
-
-  return await res.json();
-}
-
-export async function checkUpdates(projectId: string, lastUpdate: string) {
-  const res = await fetch(`/api/check-update?projectId=${projectId}&lastUpdate=${lastUpdate}`, {
-    method: "GET",
-    cache: "no-store",
-  });
-
-  return await res.json();
-}
 
 export const TodoPanel = ({ session, params }: { session: Session; params: Array<string> }) => {
   const [ownerId, projectId] = params;
@@ -35,27 +19,23 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
   const [project, setProject] = useState<Project>({} as Project);
   const todoList: Todo[] = project.todos;
 
-  const lastUpdate = dayjs(project.updatedAt).format("YYYYMMDDHHmmssSSS");
-
-  useEffect(() => {
-    getProject(user?._id as string, projectId).then((project) => {
-      superSort(project.todos);
-      setProject(project);
+  //const lastUpdate = dayjs(project.updatedAt).format("YYYYMMDDHHmmssSSS");
+  const getProject = useCallback(async () => {
+    const res = await fetch(`/api/todos?ownerId=${ownerId}&projectId=${projectId}`, {
+      method: "GET",
     });
-  }, [ownerId, projectId, user?._id]);
+    const result = await res.json();
+    if (!result.error) {
+      result.todos = superSort(result.todos);
+      setProject(result);
+    }
+  }, [ownerId, projectId]);
 
   useEffect(() => {
-    setInterval(() => {
-      checkUpdates(projectId, lastUpdate).then((res) => {
-        if (res.reRender) {
-          getProject(user?._id as string, projectId).then((project) => {
-            superSort(project.todos);
-            setProject(project);
-          });
-        }
-      });
-    }, 2000);
-  }, [lastUpdate, projectId, user?._id]);
+    console.log("fetching");
+    getProject();
+  }, [getProject]);
+
   /* 
   useEffect(() => {
     const eventSource = new EventSource(
@@ -87,7 +67,7 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
 
   if (!project.participants)
     return (
-      <Spin size="large" tip="Cargando proyecto">
+      <Spin size="large" tip="Cargando proyecto" spinning={!project.participants}>
         <div style={{ width: "100vw", height: "100vh" }} />
       </Spin>
     );
@@ -105,7 +85,7 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
   });
 
   return (
-    <Suspense fallback={<Spin />}>
+    <Suspense fallback={null}>
       <header className={styles.header}>
         <div className={styles.title}>
           <h1>{project.name}</h1>
@@ -146,6 +126,7 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
                 <TodoCard
                   key={todo._id}
                   todo={todo}
+                  getProject={getProject}
                   projectId={project._id}
                   stagger={i * 0.1}
                   renderObject={renderObject}
@@ -177,7 +158,7 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
       </section>
       <aside className={styles.inter__sections}></aside>
       <section className={styles.right__display}>
-        <NewTodo projectId={projectId} />
+        <NewTodo projectId={projectId} getProject={getProject} />
       </section>
     </Suspense>
   );

@@ -9,7 +9,6 @@ import { lora, inter } from "./fonts";
 import { ConfigProvider } from "antd";
 import esES from "antd/es/locale/es_ES";
 import dayjs from "dayjs";
-import { SocketProvider } from "@/lib/SocketProvider/SocketProvider";
 
 dayjs.locale("es");
 

@@ -1,31 +1,31 @@
 "use client";
 
-import React from "react";
+import React, { memo } from "react";
 import styles from "./TodoCard.module.css";
 import { Todo } from "types";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
-export const TodoCard = ({
+export const TodoCard = memo(function Todo({
   todo,
   projectId,
   stagger,
   renderObject,
+  getProject,
 }: {
   todo: Todo;
   projectId: string;
   stagger: number;
   renderObject: any;
-}) => {
-  const router = useRouter();
-
+  getProject: any;
+}) {
   const handleDelete = async () => {
     const res = await fetch(`/api/todos?todoId=${todo._id}&projectId=${projectId}`, {
       method: "DELETE",
     });
     const result = await res.json();
-    if (!result.error) router.refresh();
+
+    if (!result.error) getProject();
   };
 
   const deadline = renderObject.deadline;
@@ -75,4 +75,4 @@ export const TodoCard = ({
       </section>
     </motion.article>
   );
-};
+});
