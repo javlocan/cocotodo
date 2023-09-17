@@ -7,6 +7,7 @@ const nextConfig = {
     });
     return config;
   },
+  compress: false,
 };
 
 module.exports = nextConfig;
