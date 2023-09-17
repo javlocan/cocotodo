@@ -22,6 +22,7 @@ export async function getProject(ownerId: string, projectId: string) {
 export async function checkUpdates(projectId: string, lastUpdate: string) {
   const res = await fetch(`/api/check-update?projectId=${projectId}&lastUpdate=${lastUpdate}`, {
     method: "GET",
+    cache: "no-store",
   });
 
   return await res.json();
@@ -34,6 +35,8 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
   const [project, setProject] = useState<Project>({} as Project);
   const todoList: Todo[] = project.todos;
 
+  const lastUpdate = dayjs(project.updatedAt).format("YYYYMMDDHHmmssSSS");
+
   useEffect(() => {
     getProject(user?._id as string, projectId).then((project) => {
       superSort(project.todos);
@@ -41,17 +44,14 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
     });
   }, [ownerId, projectId, user?._id]);
 
-  const lastUpdate = dayjs(project.updatedAt).format("YYYYMMDDHHmmssSSS");
-
   useEffect(() => {
-    let interval = setInterval(() => {
+    setInterval(() => {
       checkUpdates(projectId, lastUpdate).then((res) => {
         if (res.reRender) {
           getProject(user?._id as string, projectId).then((project) => {
             superSort(project.todos);
             setProject(project);
           });
-          clearInterval(interval);
         }
       });
     }, 2000);
