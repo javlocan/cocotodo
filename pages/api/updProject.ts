@@ -15,7 +15,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   const interval = setInterval(async () => {
-    await connectDB();
+    mongoose.disconnect().then(async () => {
+      connectDB();
+    });
+
     const projectId = req.query.id;
     const project = await Project.findById(projectId);
 
