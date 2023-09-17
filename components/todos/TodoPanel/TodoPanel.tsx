@@ -19,6 +19,14 @@ export async function getProject(ownerId: string, projectId: string) {
   return await res.json();
 }
 
+export async function checkUpdates(projectId: string, lastUpdate: string) {
+  const res = await fetch(`/api/check-update?projectId=${projectId}&lastUpdate=${lastUpdate}`, {
+    method: "GET",
+  });
+
+  return await res.json();
+}
+
 export const TodoPanel = ({ session, params }: { session: Session; params: Array<string> }) => {
   const [ownerId, projectId] = params;
   const { user } = session;
@@ -35,6 +43,20 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
 
   const lastUpdate = dayjs(project.updatedAt).format("YYYYMMDDHHmmssSSS");
 
+  useEffect(() => {
+    let interval = setInterval(() => {
+      checkUpdates(projectId, lastUpdate).then((res) => {
+        if (res.reRender) {
+          getProject(user?._id as string, projectId).then((project) => {
+            superSort(project.todos);
+            setProject(project);
+          });
+          clearInterval(interval);
+        }
+      });
+    }, 2000);
+  }, [lastUpdate, projectId, user?._id]);
+  /* 
   useEffect(() => {
     const eventSource = new EventSource(
       `/api/updProject?id=${projectId}&lastUpdate=${lastUpdate}`,
@@ -61,7 +83,7 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
     return () => {
       eventSource.close();
     };
-  }, [lastUpdate, projectId, user?._id]);
+  }, [lastUpdate, projectId, user?._id]); */
 
   if (!project.participants)
     return (

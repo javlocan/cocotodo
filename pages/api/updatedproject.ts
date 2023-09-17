@@ -1,19 +1,32 @@
-import {NextApiRequest, NextApiResponse} from 'next'
+import { connectDB } from "@/lib/mongodb";
+import { Project } from "@/models/project";
+import dayjs from "dayjs";
+import { NextApiRequest } from "next";
 
-export const sleep = (ms:number) => new Promise(resolve => setTimeout(resolve, ms));
-
-// curl -Nv localhost:3000/api/see
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Content-Type', 'text/event-stream;charset=utf-8');
-  res.setHeader('Cache-Control', 'no-cache, no-transform');
-  res.setHeader('X-Accel-Buffering', 'no');
-
-  for (let i = 0; i < 5; i++) {
-    res.write(`data: Hello seq ${i}\n\n`);
-    await sleep(1000);
-  }
-  res.end('done\n');
+export const config = {
+  runtime: "edge",
 };
 
-export default handler;
+export default async function handler(req: NextApiRequest) {
+  const encoder = new TextEncoder();
+  connectDB();
+
+  const projectId = req.query.id;
+  const project = await Project.findById(projectId);
+
+  const lastUpdateClient = req.query.lastUpdate; // same format... sad
+  const lastUpdateServer = dayjs(project.updatedAt).format("YYYYMMDDHHmmssSSS");
+
+  const reRender = lastUpdateClient !== lastUpdateServer ? "outdated" : "uptodate";
+
+  const readable = new ReadableStream({
+    async start(controller) {
+      controller.enqueue(encoder.encode("as"));
+      controller.close();
+    },
+  });
+
+  return new Response(readable, {
+    headers: { "Content-Type": "text/html; charset=utf-8" },
+  });
+}

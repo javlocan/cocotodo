@@ -7,6 +7,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   res.writeHead(200, {
     Connection: "keep-alive",
+    Accept: "text/event-stream",
     "Access-Control-Allow-Credentials": "true",
     "Access-Control-Allow-Origin": `*`,
     "Content-Encoding": "none",
@@ -15,10 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   const interval = setInterval(async () => {
-    mongoose.disconnect().then(async () => {
-      connectDB();
-    });
-
+    connectDB();
     const projectId = req.query.id;
     const project = await Project.findById(projectId);
 
@@ -26,7 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const lastUpdateServer = dayjs(project.updatedAt).format("YYYYMMDDHHmmssSSS");
 
     const reRender = lastUpdateClient !== lastUpdateServer;
-    console.log("Checking how this is going ", reRender, project);
+    console.log("Checking how this is going ", reRender);
 
     res.write(
       `data: ${JSON.stringify({
