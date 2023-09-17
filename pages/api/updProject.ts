@@ -23,14 +23,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const lastUpdateServer = dayjs(project.updatedAt).format("YYYYMMDDHHmmssSSS");
 
     const reRender = lastUpdateClient !== lastUpdateServer;
-
+    console.log("Checking how this is going ", reRender, project);
     res.write(
       `data: ${JSON.stringify({
         message: reRender ? "Someone's done something" : "Chill",
         value: reRender,
       })}\n\n`
     );
-  }, 2000);
+
+    mongoose.disconnect();
+  }, 3000);
 
   res.on("close", () => {
     console.log(`close `);

@@ -19,7 +19,6 @@ export async function GET(req: NextRequest) {
   }
   const ownerId = new mongoose.Types.ObjectId(params.ownerId);
   const projectId = new mongoose.Types.ObjectId(params.projectId);
-  console.log("before");
   const project = await Project.findById(projectId);
 
   if (!project) return NextResponse.json({ error: "The project does not exist" }, { status: 400 });

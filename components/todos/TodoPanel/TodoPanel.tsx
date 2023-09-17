@@ -12,7 +12,6 @@ import { Antvatar } from "@/components/users/Antvatar/Antvatar";
 import { Spin } from "antd";
 
 export async function getProject(ownerId: string, projectId: string) {
-  console.log("is fetching");
   const res = await fetch(`/api/todos?ownerId=${ownerId}&projectId=${projectId}`, {
     method: "GET",
   });
@@ -83,7 +82,6 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
     if (!todo.deadline && todoList[i - 1].deadline) monthPositions.push({ month: "S.F.", pos });
   });
 
-  console.log("Month?", monthPositions);
   return (
     <Suspense fallback={<Spin />}>
       <header className={styles.header}>
