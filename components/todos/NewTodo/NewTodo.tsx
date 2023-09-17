@@ -4,26 +4,25 @@ import { FormEvent, useState } from "react";
 import styles from "./NewTodo.module.css";
 import Image from "next/image";
 import dayjs, { Dayjs } from "dayjs";
-import { DatePicker } from "antd";
+import { DatePicker, Spin } from "antd";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export const NewTodo = ({ projectId }: { projectId: string }) => {
   const [openForm, setOpenForm] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const { data: session } = useSession();
 
   const [deadline, setDeadline] = useState<Dayjs | null>(null);
 
-  const router = useRouter();
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
 
     const title = formData.get("title") as string;
-    if (title.length < 6)
-      return alert("El título debe tener 6 carácteres al menos");
+    if (title.length < 6) return alert("El título debe tener 6 carácteres al menos");
     const body = {
       title,
       deadline,
@@ -31,19 +30,18 @@ export const NewTodo = ({ projectId }: { projectId: string }) => {
       creatorId: session?.user?._id,
       projectId,
     };
-
+    setIsLoading(true);
     const res = await fetch("/api/todos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
     const result = await res.json();
-    if (!result.error) router.refresh();
+    if (!result.error) setIsLoading(false);
   };
 
   const clearForm = () => {
     const form = document.getElementById("newform") as HTMLFormElement;
-    //form.reset;
   };
   return (
     <article className={styles.card}>
@@ -67,12 +65,7 @@ export const NewTodo = ({ projectId }: { projectId: string }) => {
 
           <div className={styles.save}>
             <button type="submit" style={{ border: "none" }} form="newtodo">
-              <Image
-                src="/icons/save.png"
-                alt="Create task"
-                width={24}
-                height={24}
-              />
+              <Image src="/icons/save.png" alt="Create task" width={24} height={24} />
             </button>
           </div>
         </div>
@@ -101,9 +94,7 @@ export const NewTodo = ({ projectId }: { projectId: string }) => {
             onSelect={() => setShowPicker(false)}
             onChange={(value) => setDeadline(value)}
             className={styles.date__input}
-            disabledDate={(current: Dayjs) =>
-              current && current < dayjs().startOf("day")
-            }
+            disabledDate={(current: Dayjs) => current && current < dayjs().startOf("day")}
             format="DD/MM/YYYY"
             inputReadOnly
             allowClear

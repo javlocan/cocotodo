@@ -2,10 +2,7 @@ import { connectDB } from "@/lib/mongodb";
 import { Project } from "@/models/project";
 import { NextApiRequest, NextApiResponseServerIo } from "next";
 import dayjs from "dayjs";
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponseServerIo
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponseServerIo) {
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -16,7 +13,7 @@ export default async function handler(
     const project = await Project.findById(projectId);
 
     const lastUpdateClient = req.query.lastUpdate; // same format... sad
-    const lastUpdateServer = dayjs(project.updatedAt).format("YYYYMMDDHHmmss");
+    const lastUpdateServer = dayjs(project.updatedAt).format("YYYYMMDDHHmmssSSS");
 
     const channelKey = `updateProject:${projectId}`;
 
@@ -24,6 +21,7 @@ export default async function handler(
       lastUpdateClient,
       lastUpdateServer,
     });
+    res.flushHeaders();
     return res.json({ lastUpdateClient, lastUpdateServer });
   } catch (err) {
     console.log("PROJECT SOCKET ERROR", err);

@@ -24,18 +24,14 @@ export const metadata: Metadata = {
   description: "A delicious collaborative todo application",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={`${inter.className} ${lora.variable}`}>
         <ConfigProvider locale={esES} theme={theme}>
           <NextAuthProvider>
             <Navigation />
-            {children}
+            <div className="scroller">{children}</div>
           </NextAuthProvider>
         </ConfigProvider>
       </body>

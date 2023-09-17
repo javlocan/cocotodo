@@ -7,8 +7,8 @@ import { ProjectCard } from "../ProjectCard/ProjectCard";
 import dayjs from "dayjs";
 export const ProjectPanel = ({ userInfo }: { userInfo: any }) => {
   const projects = userInfo.projects.sort((prev: Project, post: Project) => {
-    const a: any = parseInt(dayjs(prev.updatedAt).format("YYYYMMDDHHmmss"));
-    const b: any = parseInt(dayjs(post.updatedAt).format("YYYYMMDDHHmmss"));
+    const a: any = parseInt(dayjs(prev.updatedAt).format("YYYYMMDDHHmmssSSS"));
+    const b: any = parseInt(dayjs(post.updatedAt).format("YYYYMMDDHHmmssSSS"));
     return a > b ? -1 : 1;
   });
 
@@ -20,11 +20,7 @@ export const ProjectPanel = ({ userInfo }: { userInfo: any }) => {
         <LayoutGroup>
           <AnimatePresence>
             {projects.map((project: Project, i: number) => (
-              <ProjectCard
-                project={project}
-                key={project._id}
-                stagger={i * 0.1}
-              />
+              <ProjectCard project={project} key={project._id} stagger={i * 0.1} />
             ))}
           </AnimatePresence>
         </LayoutGroup>

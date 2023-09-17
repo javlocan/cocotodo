@@ -21,7 +21,7 @@ declare module "types" {
     name: string;
     ownerId: string;
     description: string;
-    participants: string[];
+    participants: User[];
     todos: Todo[];
     settings: { color?: string; image?: string };
     createdAt: Date;

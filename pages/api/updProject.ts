@@ -1,0 +1,50 @@
+import { connectDB } from "@/lib/mongodb";
+import { Project } from "@/models/project";
+import dayjs from "dayjs";
+import mongoose from "mongoose";
+import { NextApiRequest, NextApiResponse } from "next";
+
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  res.writeHead(200, {
+    Connection: "keep-alive",
+    "Access-Control-Allow-Origin": `${process.env.NEXTAUTH_URL}`,
+    "Content-Encoding": "none",
+    "Cache-Control": "no-cache, no-transform",
+    "Content-Type": "text/event-stream",
+    "X-Accel-Buffering": "no",
+  });
+
+  const interval = setInterval(async () => {
+    connectDB();
+    const projectId = req.query.id;
+    const project = await Project.findById(projectId);
+
+    const lastUpdateClient = req.query.lastUpdate; // same format... sad
+    const lastUpdateServer = dayjs(project.updatedAt).format("YYYYMMDDHHmmssSSS");
+
+    const reRender = lastUpdateClient !== lastUpdateServer;
+
+    res.write(
+      `data: ${JSON.stringify({
+        message: reRender ? "Someone's done something" : "Chill",
+        value: reRender,
+      })}\n\n`
+    );
+  }, 2000);
+
+  res.on("close", () => {
+    console.log(`close `);
+    clearInterval(interval);
+    mongoose.disconnect();
+    res.end();
+  });
+
+  res.socket?.on("close", () => {
+    console.log(`close `);
+    clearInterval(interval);
+    mongoose.disconnect();
+    res.end();
+  });
+};
+
+export default handler;

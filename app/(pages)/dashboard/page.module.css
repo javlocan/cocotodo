@@ -1,7 +1,7 @@
 .main {
   min-height: 100%;
   display: grid;
-  grid-template-columns: 12fr 1fr 360px;
+  grid-template-columns: 11fr 1fr 360px;
 }
 
 .panel__container {
@@ -29,11 +29,7 @@
 .inter__sections {
   width: 100%;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 1) 20%,
-    rgba(240, 240, 240, 1) 100%
-  );
+  background: linear-gradient(90deg, rgba(255, 255, 255, 1) 20%, rgba(240, 240, 240, 1) 100%);
 }
 
 @media (max-width: 900px) {

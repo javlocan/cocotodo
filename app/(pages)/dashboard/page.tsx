@@ -8,6 +8,7 @@ import { NewProjectForm } from "@/components/projects/NewProjectForm/NewProjectF
 import { ProjectPanel } from "@/components/projects/ProjectPanel/ProjectPanel";
 import { Divider } from "antd";
 import { GroupPanel } from "@/components/groups/GroupPanel/GroupPanel";
+import { Suspense } from "react";
 
 async function getUserInfo(id: string) {
   const res = await fetch(`${process.env.NEXTAUTH_URL}/api/user?id=${id}`, {
@@ -24,8 +25,10 @@ export default async function Dashboard() {
   return (
     <main className={styles.main}>
       <section className={styles.panel__container}>
-        <ProjectPanel userInfo={userInfo} />
-        <GroupPanel userInfo={userInfo} />
+        <Suspense>
+          <ProjectPanel userInfo={userInfo} />
+          <GroupPanel userInfo={userInfo} />
+        </Suspense>
       </section>
       <aside className={styles.inter__sections}></aside>
       <section className={styles.display__container}>

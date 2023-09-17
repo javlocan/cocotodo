@@ -7,8 +7,8 @@ import { GroupCard } from "../GroupCard/GroupCard";
 import dayjs from "dayjs";
 export const GroupPanel = ({ userInfo }: { userInfo: any }) => {
   const groups = userInfo.groups.sort((prev: Project, post: Project) => {
-    const a: any = parseInt(dayjs(prev.updatedAt).format("YYYYMMDDHHmmss"));
-    const b: any = parseInt(dayjs(post.updatedAt).format("YYYYMMDDHHmmss"));
+    const a: any = parseInt(dayjs(prev.updatedAt).format("YYYYMMDDHHmmssSSS"));
+    const b: any = parseInt(dayjs(post.updatedAt).format("YYYYMMDDHHmmssSSS"));
     return a > b ? -1 : 1;
   });
 
