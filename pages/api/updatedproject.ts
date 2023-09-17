@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/mongodb";
+/* import { connectDB } from "@/lib/mongodb";
 import { Project } from "@/models/project";
 import dayjs from "dayjs";
 import { NextApiRequest } from "next";
@@ -30,3 +30,4 @@ export default async function handler(req: NextApiRequest) {
     headers: { "Content-Type": "text/html; charset=utf-8" },
   });
 }
+ */
