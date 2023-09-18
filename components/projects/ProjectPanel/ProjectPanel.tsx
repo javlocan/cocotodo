@@ -13,18 +13,14 @@ export const ProjectPanel = ({ userInfo }: { userInfo: any }) => {
   });
 
   return (
-    <>
-      <h2>Proyectos</h2>
-
-      <div className={styles.panel__list}>
-        <LayoutGroup>
-          <AnimatePresence>
-            {projects.map((project: Project, i: number) => (
-              <ProjectCard project={project} key={project._id} stagger={i * 0.1} />
-            ))}
-          </AnimatePresence>
-        </LayoutGroup>
-      </div>
-    </>
+    <div className={styles.panel__list}>
+      <LayoutGroup>
+        <AnimatePresence>
+          {projects.map((project: Project, i: number) => (
+            <ProjectCard project={project} key={project._id} stagger={i * 0.1} />
+          ))}
+        </AnimatePresence>
+      </LayoutGroup>
+    </div>
   );
 };

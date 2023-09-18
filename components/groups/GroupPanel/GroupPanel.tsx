@@ -13,18 +13,14 @@ export const GroupPanel = ({ userInfo }: { userInfo: any }) => {
   });
 
   return (
-    <>
-      <h2>Grupos</h2>
-
-      <div className={styles.panel__list}>
-        <LayoutGroup>
-          <AnimatePresence>
-            {groups.map((group: Group, i: number) => (
-              <GroupCard group={group} key={group._id} stagger={i * 0.1} />
-            ))}
-          </AnimatePresence>
-        </LayoutGroup>
-      </div>
-    </>
+    <div className={styles.panel__list}>
+      <LayoutGroup>
+        <AnimatePresence>
+          {groups.map((group: Group, i: number) => (
+            <GroupCard group={group} key={group._id} stagger={i * 0.1} />
+          ))}
+        </AnimatePresence>
+      </LayoutGroup>
+    </div>
   );
 };

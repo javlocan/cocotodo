@@ -8,10 +8,8 @@ import { ByeButton } from "../auth";
 
 import { useState } from "react";
 import { Avatar, Divider } from "antd";
-import { SocketIndicator } from "../sockets/SocketIndicator";
 
 export function Navigation() {
-  const [unfolded, setUnfolded] = useState(false);
   const { status, data: session } = useSession();
 
   const NavCirculito = (): JSX.Element => {
@@ -38,11 +36,7 @@ export function Navigation() {
   };
 
   return (
-    <nav
-      id="navigation"
-      className={styles.nav__container}
-      style={{ width: unfolded ? "12rem" : "5rem" }}
-    >
+    <nav id="navigation" className={styles.nav__container}>
       <header className={styles.nav__header} id="header">
         <NavCirculito />
         <Link href="/dashboard">
