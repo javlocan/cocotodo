@@ -15,13 +15,7 @@ const deleteProject = async (id: string) => {
   return res.json();
 };
 
-export const ProjectCard = ({
-  project,
-  stagger,
-}: {
-  project: Project;
-  stagger: number;
-}) => {
+export const ProjectCard = ({ project, stagger }: { project: Project; stagger: number }) => {
   const { data: session } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -52,18 +46,14 @@ export const ProjectCard = ({
     >
       <Spin
         spinning={isLoading}
-        style={{ color: "black" }}
+        style={{ color: "black", fontSize: "1.5rem" }}
         wrapperClassName="projectcard"
       >
         <article className={styles.card}>
           <h3 className={styles.name}>{project.name}</h3>
           <p className={styles.description}>{project.description}</p>
-          <span className={styles.participants}>
-            {project.participants.length} ppl
-          </span>
-          {session?.user?._id === project.ownerId && (
-            <button onClick={handleDelete}>DELETE</button>
-          )}
+          <span className={styles.participants}>{project.participants.length} ppl</span>
+          {session?.user?._id === project.ownerId && <button onClick={handleDelete}>DELETE</button>}
           <button onClick={openProject} style={{ bottom: "35px" }}>
             OPEN
           </button>

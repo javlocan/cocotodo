@@ -14,16 +14,15 @@ import { Spin } from "antd";
 
 export const TodoPanel = ({ session, params }: { session: Session; params: Array<string> }) => {
   const [ownerId, projectId] = params;
-  const { user } = session;
 
   const [project, setProject] = useState<Project>({} as Project);
-  const todoList: Todo[] = project.todos;
 
   //const lastUpdate = dayjs(project.updatedAt).format("YYYYMMDDHHmmssSSS");
   const getProject = useCallback(async () => {
     const res = await fetch(`/api/todos?ownerId=${ownerId}&projectId=${projectId}`, {
       method: "GET",
     });
+
     const result = await res.json();
     if (!result.error) {
       result.todos = superSort(result.todos);
@@ -32,38 +31,8 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
   }, [ownerId, projectId]);
 
   useEffect(() => {
-    console.log("fetching");
     getProject();
   }, [getProject]);
-
-  /* 
-  useEffect(() => {
-    const eventSource = new EventSource(
-      `/api/updProject?id=${projectId}&lastUpdate=${lastUpdate}`,
-      {
-        withCredentials: true,
-      }
-    );
-    eventSource.onopen = () => {
-      console.log("open");
-    };
-    eventSource.onmessage = (e) => {
-      const res = JSON.parse(e.data);
-      if (res.value === true) {
-        getProject(user?._id as string, projectId).then((project) => {
-          superSort(project.todos);
-          setProject(project);
-        });
-      }
-    };
-    eventSource.onerror = (e) => {
-      console.log(e);
-    };
-
-    return () => {
-      eventSource.close();
-    };
-  }, [lastUpdate, projectId, user?._id]); */
 
   if (!project.participants)
     return (
@@ -75,13 +44,17 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
   // Month array for mapping
   const monthPositions: { month: string; pos: number }[] = [];
 
-  todoList.forEach((todo: Todo, i: number) => {
+  superSort(project.todos).forEach((todo: Todo, i: number) => {
     const pos = i + 1;
-    const month = dayjs(todo.deadline).format("MMMM");
-    if (i === 0) monthPositions.push({ month, pos });
-    if (i > 0 && todo.deadline && month !== dayjs(project.todos[i - 1].deadline).format("MMMM"))
-      monthPositions.push({ month, pos });
-    if (!todo.deadline && todoList[i - 1].deadline) monthPositions.push({ month: "S.F.", pos });
+    const month = todo.deadline ? dayjs(todo?.deadline).format("MMMM") : "";
+    console.log(todo.deadline, month);
+    if (i === 0) monthPositions.push({ month: month ? month : "S.F.", pos });
+    else {
+      if (!month && project.todos[i - 1]?.deadline)
+        monthPositions.push({ month: "S.F.", pos: pos + 1 });
+      if (i > 0 && todo?.deadline && month !== dayjs(project.todos[i - 1].deadline).format("MMMM"))
+        monthPositions.push({ month, pos });
+    }
   });
 
   return (
@@ -105,18 +78,21 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
       <section className={styles.todos__container}>
         <LayoutGroup>
           <AnimatePresence>
-            {todoList?.map((todo: Todo, i: number) => {
+            {project.todos?.map((todo: Todo, i: number) => {
               // Si mañana es el mismo dia, height cambia
               const isSameDayAsTomorrow = dayjs(todo.deadline).isSame(
-                todoList[i + 1]?.deadline,
+                project.todos[i + 1]?.deadline,
                 "day"
               );
               const deadline =
                 i !== 0
-                  ? todo.deadline && !dayjs(todo.deadline).isSame(todoList[i - 1]?.deadline, "day")
+                  ? todo.deadline &&
+                    !dayjs(todo.deadline).isSame(project.todos[i - 1]?.deadline, "day")
                     ? dayjs(todo.deadline).format("dddDD")
                     : ""
-                  : dayjs(todo.deadline).format("dddDD");
+                  : todo.deadline
+                  ? dayjs(todo.deadline).format("dddDD")
+                  : null;
 
               const renderObject = {
                 isSameDayAsTomorrow,
@@ -164,7 +140,7 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
   );
 };
 
-export const superSort = (todos: Todo[]) =>
+const superSort = (todos: Todo[]) =>
   todos.sort((prev: Todo, post: Todo) => {
     const a: any = parseInt(dayjs(prev.deadline).format("YYYYMMDDHHmmssSSS")) || null;
     const b: any = parseInt(dayjs(post.deadline).format("YYYYMMDDHHmmssSSS")) || null;

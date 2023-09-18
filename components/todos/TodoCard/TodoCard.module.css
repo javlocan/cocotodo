@@ -33,7 +33,7 @@
 }
 .card__interaction {
   pointer-events: none;
-  opacity: 0;
+
   background: rgba(255, 255, 255, 0.6);
   border-radius: 0.5rem;
   height: 100%;

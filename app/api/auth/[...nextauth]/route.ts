@@ -41,8 +41,7 @@ export const authOptions: NextAuthOptions = {
 
           const project = new Project({
             name: "Mi primer proyecto",
-            description:
-              "Creado de forma predeterminada para empezar a explorar ",
+            description: "Creado de forma predeterminada para empezar a explorar ",
             ownerId: user._id,
             participants: [user._id],
           });
@@ -50,6 +49,7 @@ export const authOptions: NextAuthOptions = {
           const todo = new Todo({
             title: "Mi primera tarea",
             content: "Creada de forma predeterminada para empezar a explorar ",
+            deadline: null,
             creatorId: user._id,
           });
 
@@ -67,10 +67,7 @@ export const authOptions: NextAuthOptions = {
 
         if (!userFound) throw new Error("Cannot find username");
 
-        const passwordMatch = await bcrypt.compare(
-          password,
-          userFound.password
-        );
+        const passwordMatch = await bcrypt.compare(password, userFound.password);
 
         if (!passwordMatch) throw new Error("Invalid credentials");
 
