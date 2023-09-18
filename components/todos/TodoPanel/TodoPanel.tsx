@@ -10,7 +10,7 @@ import { Session } from "next-auth";
 import { NewTodo } from "../NewTodo/NewTodo";
 import { Participants } from "@/components/users/Antvatar/Participants";
 import { Antvatar } from "@/components/users/Antvatar/Antvatar";
-import { Spin } from "antd";
+import { Divider, Spin } from "antd";
 
 export const TodoPanel = ({ session, params }: { session: Session; params: Array<string> }) => {
   const [ownerId, projectId] = params;
@@ -51,7 +51,7 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
     if (i === 0) monthPositions.push({ month: month ? month : "S.F.", pos });
     else {
       if (!month && project.todos[i - 1]?.deadline)
-        monthPositions.push({ month: "S.F.", pos: pos + 1 });
+        monthPositions.push({ month: "S.F.", pos: pos + 2 });
       if (i > 0 && todo?.deadline && month !== dayjs(project.todos[i - 1].deadline).format("MMMM"))
         monthPositions.push({ month, pos });
     }
@@ -59,22 +59,6 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
 
   return (
     <Suspense fallback={null}>
-      <header className={styles.header}>
-        <div className={styles.title}>
-          <h1>{project.name}</h1>
-          <div className={styles.participants}>
-            <div className={styles.owner}>
-              <Antvatar user={project?.participants[0]} size={24} />
-              <h2>{project?.participants[0].displayname || "algo"}</h2>
-            </div>
-            <Participants size={40}>
-              {project.participants?.map((participant: any) => (
-                <Antvatar key={participant._id} user={participant} size={40} />
-              ))}
-            </Participants>
-          </div>
-        </div>
-      </header>
       <section className={styles.todos__container}>
         <LayoutGroup>
           <AnimatePresence>
@@ -122,7 +106,7 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
                   exit={{ opacity: 0, y: 40, transition: { duration: 0.3 } }}
                   className={styles.month}
                   style={{
-                    gridRow: `${obj.pos}/${obj.pos === 1 ? obj.pos + 1 : obj.pos + 2}`,
+                    gridRow: `${obj.pos}/${obj.pos + 2}`,
                   }}
                 >
                   {obj.month}
@@ -134,7 +118,27 @@ export const TodoPanel = ({ session, params }: { session: Session; params: Array
       </section>
       <aside className={styles.inter__sections}></aside>
       <section className={styles.right__display}>
-        <NewTodo projectId={projectId} getProject={getProject} />
+        <div style={{ position: "sticky", top: 0 }}>
+          <header className={styles.header}>
+            <div className={styles.title}>
+              <h1>{project.name}</h1>
+              <div className={styles.participants}>
+                <div className={styles.owner}>
+                  <Antvatar user={project?.participants[0]} size={24} />
+                  <h2>{project?.participants[0].displayname || "algo"}</h2>
+                </div>
+                <Participants size={40}>
+                  {project.participants?.map((participant: any) => (
+                    <Antvatar key={participant._id} user={participant} size={40} />
+                  ))}
+                </Participants>
+              </div>
+            </div>
+            <Divider style={{ margin: "1.5rem 0 0 0" }} />
+          </header>
+
+          <NewTodo projectId={projectId} getProject={getProject} />
+        </div>
       </section>
     </Suspense>
   );
